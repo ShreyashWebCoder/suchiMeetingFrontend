@@ -1,0 +1,237 @@
+
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    controllerName="materialrequisition.controller.SubContractorHOD"
+    id="subContractorHODView">
+    <Page id="subContractorHODPage" enableScrolling="true" showNavButton="true" navButtonPress="onNavBack">
+        <customHeader>
+            <Bar id="hodHeaderBar" class="sapMPageHeader">
+                <contentLeft>
+                    <Button id="navBackButton" icon="sap-icon://nav-back" press="onNavBack" type="Transparent"/>
+                </contentLeft>
+                <contentMiddle>
+                    <Title id="hodTitle" text="Material Requisition - HOD Approval" level="H2" class="sapMTitle"/>
+                </contentMiddle>
+                <contentRight>
+                    <Button id="refreshButton" icon="sap-icon://refresh" press="onRefresh" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <!-- Request Status Card -->
+            <Panel id="statusPanel" class="sapUiMediumMargin" headerText="Request Status">
+                <content>
+                    <HBox id="statusInfo" class="sapUiSmallMargin" justifyContent="SpaceBetween" alignItems="Center">
+                        <VBox id="requestInfo">
+                            <Label id="requestIdLabel" text="Request ID:" class="sapUiTinyMarginBottom"/>
+                            <Text id="requestIdText" text="{/requestData/requestId}" class="sapMText"/>
+                        </VBox>
+                        <VBox id="statusInfo2">
+                            <Label id="statusLabel" text="Status:" class="sapUiTinyMarginBottom"/>
+                            <ObjectStatus id="statusText" text="{/requestData/status}" state="{/requestData/statusState}"/>
+                        </VBox>
+                        <VBox id="submittedInfo">
+                            <Label id="submittedDateLabel" text="Submitted Date:" class="sapUiTinyMarginBottom"/>
+                            <Text id="submittedDateText" text="{/requestData/submittedDate}" class="sapMText"/>
+                        </VBox>
+                        <VBox id="requestorInfo">
+                            <Label id="submittedByLabel" text="Submitted By:" class="sapUiTinyMarginBottom"/>
+                            <Text id="submittedByText" text="{/requestData/submittedBy}" class="sapMText"/>
+                        </VBox>
+                    </HBox>
+                </content>
+            </Panel>
+
+            <!-- General Information Panel -->
+            <Panel id="generalInfoPanel" class="sapUiMediumMargin" headerText="General Information" expandable="true" expanded="true">
+                <content>
+                    <f:SimpleForm
+                        id="generalInfoForm"
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        labelSpanXL="3"
+                        labelSpanL="3"
+                        labelSpanM="4"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="4"
+                        emptySpanL="4"
+                        emptySpanM="4"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="1"
+                        singleContainerFullSize="false"
+                        class="sapUiSmallMargin">
+                        <f:content>
+                            <Label id="plantDisplayLabel" text="Plant:"/>
+                            <Text id="plantDisplayText" text="{/requestData/plant}"/>
+                            
+                            <Label id="projectDisplayLabel" text="Project Name:"/>
+                            <Text id="projectDisplayText" text="{/requestData/projectName}"/>
+                            
+                            <Label id="departmentDisplayLabel" text="Department:"/>
+                            <Text id="departmentDisplayText" text="{/requestData/department}"/>
+                            
+                            <Label id="mainCodeDisplayLabel" text="Main Code:"/>
+                            <Text id="mainCodeDisplayText" text="{/requestData/mainCode}"/>
+                            
+                            <Label id="subconDisplayLabel" text="Subcon Name:"/>
+                            <Text id="subconDisplayText" text="{/requestData/subconName}"/>
+                            
+                            <Label id="mrPrNoDisplayLabel" text="MR/PR No:"/>
+                            <Text id="mrPrNoDisplayText" text="{/requestData/mrPrNo}"/>
+                            
+                            <Label id="requestorNameDisplayLabel" text="Requestor Name:"/>
+                            <Text id="requestorNameDisplayText" text="{/requestData/requestorName}"/>
+                            
+                            <Label id="requestorEmpNoDisplayLabel" text="Requestor Emp. No:"/>
+                            <Text id="requestorEmpNoDisplayText" text="{/requestData/requestorEmpNo}"/>
+                            
+                            <Label id="dateDisplayLabel" text="Request Date:"/>
+                            <Text id="dateDisplayText" text="{/requestData/date}"/>
+                        </f:content>
+                    </f:SimpleForm>
+                </content>
+            </Panel>
+
+            <!-- Items Panel -->
+            <Panel id="itemsPanel" class="sapUiMediumMargin" headerText="Requested Items" expandable="true" expanded="true">
+                <headerToolbar>
+                    <Toolbar id="itemsToolbar">
+                        <Title id="itemsPanelTitle" text="Requested Items"/>
+                        <ToolbarSpacer id="itemsToolbarSpacer"/>
+                        <Text id="itemsCount" text="Total Items: {/requestData/items/length}" class="sapMText"/>
+                    </Toolbar>
+                </headerToolbar>
+                <content>
+                    <Table
+                        id="itemsDisplayTable"
+                        items="{/requestData/items}"
+                        growing="true"
+                        growingThreshold="20"
+                        mode="None"
+                        class="sapUiSmallMarginTop">
+                        <columns>
+                            <Column id="srNoDisplayColumn" width="8%">
+                                <Text id="srNoDisplayHeader" text="Sr. No."/>
+                            </Column>
+                            <Column id="wbsElementDisplayColumn" width="18%">
+                                <Text id="wbsElementDisplayHeader" text="WBS Element"/>
+                            </Column>
+                            <Column id="partNoDisplayColumn" width="18%">
+                                <Text id="partNoDisplayHeader" text="Part No"/>
+                            </Column>
+                            <Column id="itemDescriptionDisplayColumn" width="30%">
+                                <Text id="itemDescriptionDisplayHeader" text="Item Description"/>
+                            </Column>
+                            <Column id="quantityDisplayColumn" width="13%">
+                                <Text id="quantityDisplayHeader" text="Quantity"/>
+                            </Column>
+                            <Column id="uomDisplayColumn" width="13%">
+                                <Text id="uomDisplayHeader" text="UOM"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem id="itemsDisplayRow">
+                                <cells>
+                                    <Text id="srNoDisplayCell" text="{srNo}"/>
+                                    <Text id="wbsElementDisplayCell" text="{wbsElement}"/>
+                                    <Text id="partNoDisplayCell" text="{partNo}"/>
+                                    <Text id="itemDescriptionDisplayCell" text="{itemDescription}"/>
+                                    <ObjectNumber id="quantityDisplayCell" number="{quantity}" emphasized="false"/>
+                                    <Text id="uomDisplayCell" text="{uom}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+            </Panel>
+
+            <!-- Previous Approvals Panel (if any) -->
+            <Panel id="approvalsPanel" class="sapUiMediumMargin" headerText="Approval History" expandable="true" expanded="false" visible="{= ${/requestData/approvals/length} > 0}">
+                <content>
+                    <Table
+                        id="approvalsTable"
+                        items="{/requestData/approvals}"
+                        mode="None"
+                        class="sapUiSmallMarginTop">
+                        <columns>
+                            <Column id="approverColumn">
+                                <Text id="approverHeader" text="Approver"/>
+                            </Column>
+                            <Column id="approvalDateColumn">
+                                <Text id="approvalDateHeader" text="Date"/>
+                            </Column>
+                            <Column id="approvalStatusColumn">
+                                <Text id="approvalStatusHeader" text="Status"/>
+                            </Column>
+                            <Column id="approvalRemarksColumn">
+                                <Text id="approvalRemarksHeader" text="Remarks"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem id="approvalsRow">
+                                <cells>
+                                    <Text id="approverCell" text="{approver}"/>
+                                    <Text id="approvalDateCell" text="{date}"/>
+                                    <ObjectStatus id="approvalStatusCell" text="{status}" state="{statusState}"/>
+                                    <Text id="approvalRemarksCell" text="{remarks}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </content>
+            </Panel>
+
+            <!-- HOD Action Panel -->
+            <Panel id="hodActionPanel" class="sapUiMediumMargin" headerText="HOD Action" expandable="false">
+                <content>
+                    <VBox id="actionContent" class="sapUiMediumMargin">
+                        <Label id="remarksLabel" text="Remarks:" required="true" class="sapUiTinyMarginBottom"/>
+                        <TextArea
+                            id="remarksInput"
+                            value="{/hodAction/remarks}"
+                            rows="4"
+                            cols="50"
+                            maxLength="500"
+                            placeholder="Please provide your remarks for this action..."
+                            class="sapUiMediumMarginBottom"/>
+                        <Text id="remarksCounter" text="Characters: {= ${/hodAction/remarks} ? ${/hodAction/remarks}.length : 0}/500" class="sapUiTinyMarginBottom"/>
+                    </VBox>
+                </content>
+            </Panel>
+        </content>
+        
+        <!-- Footer with Action Buttons -->
+        <footer>
+            <OverflowToolbar id="hodFooterToolbar">
+                <ToolbarSpacer id="hodFooterSpacer"/>
+                <Button
+                    id="returnButton"
+                    text="Return"
+                    type="Default"
+                    icon="sap-icon://undo"
+                    press="onReturn"
+                    class="sapUiTinyMarginEnd"/>
+                <Button
+                    id="rejectButton"
+                    text="Reject"
+                    type="Reject"
+                    icon="sap-icon://decline"
+                    press="onReject"
+                    class="sapUiTinyMarginEnd"/>
+                <Button
+                    id="approveButton"
+                    text="Approve"
+                    type="Accept"
+                    icon="sap-icon://accept"
+                    press="onApprove"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

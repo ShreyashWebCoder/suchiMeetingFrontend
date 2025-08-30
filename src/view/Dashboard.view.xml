@@ -1,0 +1,174 @@
+
+<mvc:View
+    controllerName="materialreq.controller.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards">
+    <Page id="dashboardPage" title="Material Requisition Dashboard" showNavButton="false">
+        <content>
+            <f:DynamicPage id="dynamicPageId" headerExpanded="true">
+                <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <Title text="Material Requisition System" />
+                        </f:heading>
+                        <f:actions>
+                            <Button text="New Request" type="Emphasized" press="onNewRequest" icon="sap-icon://add" />
+                            <Button text="Refresh" press="onRefresh" icon="sap-icon://refresh" />
+                        </f:actions>
+                    </f:DynamicPageTitle>
+                </f:title>
+                
+                <f:header>
+                    <f:DynamicPageHeader pinnable="true">
+                        <f:content>
+                            <HBox class="sapUiMediumMargin" justifyContent="SpaceBetween" wrap="Wrap">
+                                <!-- Status Cards -->
+                                <VBox class="sapUiMediumMarginEnd">
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Draft Requests" subtitle="{/draftCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://document" size="2rem" color="#666" />
+                                                <Text text="{/draftCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                                
+                                <VBox class="sapUiMediumMarginEnd">
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Pending Requests" subtitle="{/pendingCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://pending" size="2rem" color="#e78c07" />
+                                                <Text text="{/pendingCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                                
+                                <VBox class="sapUiMediumMarginEnd">
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Approved Requests" subtitle="{/approvedCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://accept" size="2rem" color="#107e3e" />
+                                                <Text text="{/approvedCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                                
+                                <VBox class="sapUiMediumMarginEnd">
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Completed Requests" subtitle="{/completedCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://complete" size="2rem" color="#0a6ed1" />
+                                                <Text text="{/completedCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                                
+                                <VBox class="sapUiMediumMarginEnd">
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Return Requests" subtitle="{/returnCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://undo" size="2rem" color="#e78c07" />
+                                                <Text text="{/returnCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                                
+                                <VBox>
+                                    <f:Card class="sapUiMediumMargin" width="200px" height="120px">
+                                        <f:header>
+                                            <card:Header title="Rejected Requests" subtitle="{/rejectedCount}" />
+                                        </f:header>
+                                        <f:content>
+                                            <VBox alignItems="Center" justifyContent="Center" class="sapUiContentPadding">
+                                                <core:Icon src="sap-icon://decline" size="2rem" color="#bb0000" />
+                                                <Text text="{/rejectedCount}" class="sapUiLargeMarginTop" />
+                                            </VBox>
+                                        </f:content>
+                                    </f:Card>
+                                </VBox>
+                            </HBox>
+                        </f:content>
+                    </f:DynamicPageHeader>
+                </f:header>
+                
+                <f:content>
+                    <Panel headerText="Material Requisitions" expandable="true" expanded="true" class="sapUiResponsiveMargin">
+                        <content>
+                            <Toolbar>
+                                <Title text="Recent Requests" />
+                                <ToolbarSpacer />
+                                <SearchField search="onSearch" width="300px" />
+                                <Button icon="sap-icon://filter" press="onFilter" />
+                            </Toolbar>
+                            
+                            <Table id="requestsTable" items="{/requests}" growing="true" growingThreshold="20">
+                                <columns>
+                                    <Column>
+                                        <Text text="Requisition Number" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Request Date" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Request Type" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Employee Name" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Company" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Status" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Actions" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem press="onRequestPress">
+                                        <cells>
+                                            <ObjectIdentifier title="{requisitionNumber}" />
+                                            <Text text="{requestDate}" />
+                                            <Text text="{requestType}" />
+                                            <Text text="{employeeName}" />
+                                            <Text text="{company}" />
+                                            <ObjectStatus text="{status}" state="{statusState}" />
+                                            <HBox>
+                                                <Button icon="sap-icon://edit" press="onEditRequest" type="Transparent" />
+                                                <Button icon="sap-icon://detail-view" press="onViewRequest" type="Transparent" />
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </Panel>
+                </f:content>
+            </f:DynamicPage>
+        </content>
+    </Page>
+</mvc:View>

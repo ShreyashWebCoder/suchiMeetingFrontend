@@ -1,0 +1,229 @@
+
+<mvc:View
+    controllerName="materialreq.controller.CreateRequest"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Page id="createRequestPage" title="Material / Purchase Requisition Form" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <f:DynamicPage id="dynamicPageId" headerExpanded="true">
+                <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <Title text="New Requisition" />
+                        </f:heading>
+                        <f:actions>
+                            <Label text="Draft" design="Bold" />
+                        </f:actions>
+                    </f:DynamicPageTitle>
+                </f:title>
+                
+                <f:header>
+                    <f:DynamicPageHeader pinnable="true">
+                        <f:content>
+                            <HBox justifyContent="SpaceBetween" class="sapUiMediumMargin">
+                                <VBox>
+                                    <Label text="Date:" />
+                                    <Text text="{/currentDate}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Requestor:" />
+                                    <Text text="{/requestor}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Draft" design="Bold" />
+                                </VBox>
+                            </HBox>
+                        </f:content>
+                    </f:DynamicPageHeader>
+                </f:header>
+                
+                <f:content>
+                    <IconTabBar id="iconTabBar" selectedKey="details" class="sapUiResponsiveContentPadding">
+                        <items>
+                            <IconTabFilter key="details" text="Details" icon="sap-icon://detail-view">
+                                <content>
+                                    <Panel headerText="General Information" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <form:SimpleForm
+                                                editable="true"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanXL="3"
+                                                labelSpanL="3"
+                                                labelSpanM="3"
+                                                labelSpanS="12"
+                                                adjustLabelSpan="false"
+                                                emptySpanXL="4"
+                                                emptySpanL="4"
+                                                emptySpanM="4"
+                                                emptySpanS="0"
+                                                columnsXL="1"
+                                                columnsL="1"
+                                                columnsM="1"
+                                                singleContainerFullSize="false">
+                                                <content>
+                                                    <Label text="Plant:" required="true" />
+                                                    <ComboBox selectedKey="{/plant}" items="{/plants}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                    
+                                                    <Label text="Project Name:" required="true" />
+                                                    <ComboBox selectedKey="{/projectName}" items="{/projects}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                    
+                                                    <Label text="Department:" required="true" />
+                                                    <ComboBox selectedKey="{/department}" items="{/departments}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                    
+                                                    <Label text="Main Code:" required="true" />
+                                                    <ComboBox selectedKey="{/mainCode}" items="{/mainCodes}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                </content>
+                                            </form:SimpleForm>
+                                        </content>
+                                    </Panel>
+                                    
+                                    <Panel headerText="Requisition Details" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <form:SimpleForm
+                                                editable="true"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanXL="3"
+                                                labelSpanL="3"
+                                                labelSpanM="3"
+                                                labelSpanS="12"
+                                                adjustLabelSpan="false"
+                                                emptySpanXL="4"
+                                                emptySpanL="4"
+                                                emptySpanM="4"
+                                                emptySpanS="0"
+                                                columnsXL="1"
+                                                columnsL="1"
+                                                columnsM="1"
+                                                singleContainerFullSize="false">
+                                                <content>
+                                                    <Label text="Subcon Name:" required="true" />
+                                                    <ComboBox selectedKey="{/subconName}" items="{/subcontractors}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                    
+                                                    <Label text="Mr / Pr No:" />
+                                                    <Input value="{/mrPrNo}" />
+                                                    
+                                                    <Label text="Requestor Name:" required="true" />
+                                                    <Input value="{/requestorName}" enabled="false" />
+                                                    
+                                                    <Label text="Requestor Emp. No:" required="true" />
+                                                    <Input value="{/requestorEmpNo}" enabled="false" />
+                                                    
+                                                    <Label text="Date:" required="true" />
+                                                    <DatePicker value="{/requestDate}" />
+                                                </content>
+                                            </form:SimpleForm>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="items" text="Items" icon="sap-icon://list" count="{/items/length}">
+                                <content>
+                                    <Panel headerText="Items" class="sapUiResponsiveMargin">
+                                        <headerToolbar>
+                                            <Toolbar>
+                                                <Title text="Material Items" />
+                                                <ToolbarSpacer />
+                                                <SearchField search="onSearchItems" width="300px" />
+                                                <Button text="Add Item" type="Emphasized" press="onAddItem" icon="sap-icon://add" />
+                                            </Toolbar>
+                                        </headerToolbar>
+                                        <content>
+                                            <Table id="itemsTable" items="{/items}" mode="Delete" delete="onDeleteItem">
+                                                <columns>
+                                                    <Column>
+                                                        <Text text="Sr. No." />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="WBS Element" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Part No" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Item Description" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Quantity" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="UOM" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Actions" />
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem>
+                                                        <cells>
+                                                            <Text text="{srNo}" />
+                                                            <ComboBox selectedKey="{wbsElement}" items="{/wbsElements}">
+                                                                <core:Item key="{key}" text="{text}" />
+                                                            </ComboBox>
+                                                            <ComboBox selectedKey="{partNo}" items="{/partNumbers}">
+                                                                <core:Item key="{key}" text="{text}" />
+                                                            </ComboBox>
+                                                            <Input value="{itemDescription}" />
+                                                            <HBox>
+                                                                <Button icon="sap-icon://less" press="onDecreaseQuantity" type="Transparent" />
+                                                                <Input value="{quantity}" width="60px" textAlign="Center" />
+                                                                <Button icon="sap-icon://add" press="onIncreaseQuantity" type="Transparent" />
+                                                            </HBox>
+                                                            <ComboBox selectedKey="{uom}" items="{/uoms}">
+                                                                <core:Item key="{key}" text="{text}" />
+                                                            </ComboBox>
+                                                            <Button icon="sap-icon://delete" press="onDeleteSingleItem" type="Transparent" />
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="attachments" text="Attachments" icon="sap-icon://attachment">
+                                <content>
+                                    <Panel headerText="Attachments" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <VBox class="sapUiMediumMargin">
+                                                <HBox class="sapUiMediumMarginBottom">
+                                                    <Button text="Upload File" press="onUploadFile" icon="sap-icon://upload" />
+                                                </HBox>
+                                                <List items="{/attachments}">
+                                                    <StandardListItem title="{fileName}" description="{fileSize}" icon="sap-icon://document" />
+                                                </List>
+                                            </VBox>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </f:content>
+                
+                <f:footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer />
+                        <Button text="Save as Draft" press="onSaveAsDraft" />
+                        <Button text="Submit" type="Emphasized" press="onSubmit" />
+                        <Button text="Cancel" press="onCancel" />
+                    </OverflowToolbar>
+                </f:footer>
+            </f:DynamicPage>
+        </content>
+    </Page>
+</mvc:View>

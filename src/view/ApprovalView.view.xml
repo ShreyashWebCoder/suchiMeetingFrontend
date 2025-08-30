@@ -1,0 +1,178 @@
+
+<mvc:View
+    controllerName="materialreq.controller.ApprovalView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Page id="approvalPage" title="Material Requisition Approval" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <f:DynamicPage id="dynamicPageId" headerExpanded="true">
+                <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <Title text="Requisition Approval" />
+                        </f:heading>
+                        <f:subHeading>
+                            <Label text="{/requisitionNumber}" />
+                        </f:subHeading>
+                        <f:actions>
+                            <ObjectStatus text="{/status}" state="{/statusState}" />
+                        </f:actions>
+                    </f:DynamicPageTitle>
+                </f:title>
+                
+                <f:header>
+                    <f:DynamicPageHeader pinnable="true">
+                        <f:content>
+                            <HBox justifyContent="SpaceBetween" class="sapUiMediumMargin">
+                                <VBox>
+                                    <Label text="Request Date:" />
+                                    <Text text="{/requestDate}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Requestor:" />
+                                    <Text text="{/requestorName}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Company:" />
+                                    <Text text="{/company}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Total Items:" />
+                                    <Text text="{/totalItems}" />
+                                </VBox>
+                            </HBox>
+                        </f:content>
+                    </f:DynamicPageHeader>
+                </f:header>
+                
+                <f:content>
+                    <IconTabBar id="iconTabBar" selectedKey="details" class="sapUiResponsiveContentPadding">
+                        <items>
+                            <IconTabFilter key="details" text="Request Details" icon="sap-icon://detail-view">
+                                <content>
+                                    <Panel headerText="General Information" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <form:SimpleForm
+                                                editable="false"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanXL="3"
+                                                labelSpanL="3"
+                                                labelSpanM="3"
+                                                labelSpanS="12"
+                                                adjustLabelSpan="false"
+                                                emptySpanXL="4"
+                                                emptySpanL="4"
+                                                emptySpanM="4"
+                                                emptySpanS="0"
+                                                columnsXL="1"
+                                                columnsL="1"
+                                                columnsM="1"
+                                                singleContainerFullSize="false">
+                                                <content>
+                                                    <Label text="Plant:" />
+                                                    <Text text="{/plant}" />
+                                                    
+                                                    <Label text="Project Name:" />
+                                                    <Text text="{/projectName}" />
+                                                    
+                                                    <Label text="Department:" />
+                                                    <Text text="{/department}" />
+                                                    
+                                                    <Label text="Main Code:" />
+                                                    <Text text="{/mainCode}" />
+                                                    
+                                                    <Label text="Subcontractor:" />
+                                                    <Text text="{/subconName}" />
+                                                </content>
+                                            </form:SimpleForm>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="items" text="Items" icon="sap-icon://list" count="{/items/length}">
+                                <content>
+                                    <Panel headerText="Material Items" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <Table id="itemsTable" items="{/items}">
+                                                <columns>
+                                                    <Column>
+                                                        <Text text="Sr. No." />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="WBS Element" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Part No" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Item Description" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Quantity" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="UOM" />
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem>
+                                                        <cells>
+                                                            <Text text="{srNo}" />
+                                                            <Text text="{wbsElement}" />
+                                                            <Text text="{partNo}" />
+                                                            <Text text="{itemDescription}" />
+                                                            <Text text="{quantity}" />
+                                                            <Text text="{uom}" />
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="comments" text="Comments" icon="sap-icon://comment">
+                                <content>
+                                    <Panel headerText="Approval Comments" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <VBox class="sapUiMediumMargin">
+                                                <Label text="Add Comments:" />
+                                                <TextArea value="{/approvalComments}" rows="4" width="100%" placeholder="Enter your comments here..." />
+                                            </VBox>
+                                        </content>
+                                    </Panel>
+                                    
+                                    <Panel headerText="Previous Comments" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <List items="{/previousComments}">
+                                                <FeedListItem
+                                                    sender="{sender}"
+                                                    timestamp="{timestamp}"
+                                                    text="{comment}"
+                                                    icon="{icon}" />
+                                            </List>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </f:content>
+                
+                <f:footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer />
+                        <Button text="Return" press="onReturn" icon="sap-icon://undo" />
+                        <Button text="Reject" press="onReject" type="Reject" icon="sap-icon://decline" />
+                        <Button text="Approve" press="onApprove" type="Accept" icon="sap-icon://accept" />
+                    </OverflowToolbar>
+                </f:footer>
+            </f:DynamicPage>
+        </content>
+    </Page>
+</mvc:View>

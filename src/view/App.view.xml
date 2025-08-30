@@ -1,0 +1,61 @@
+
+<mvc:View controllerName="materialreq.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    xmlns:core="sap.ui.core"
+    height="100%"
+    >
+     <tnt:ToolPage id="toolPage">
+        
+            <tnt:header>
+                <tnt:ToolHeader id="_IDGenToolHeader1">
+                    <Button 
+                        id="sideNavigationToggleButton"
+                        icon="sap-icon://menu2"
+                        type="Transparent"
+                        press=".onSideNavButtonPress"/>
+            
+                    <Title id="_IDGenTitle" text="Material Requisition System" level="H1" titleStyle="H4" class="sapUiMediumMarginBegin"/>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer"/>
+                    <Text id="_IDGenText" text="BTP Fiori App" class="sapUiSmallMarginEnd"/>
+                </tnt:ToolHeader>
+            </tnt:header>
+    
+            <tnt:sideContent>
+                <tnt:SideNavigation id="sideNavigation" >
+                    <tnt:NavigationList id="_IDGenNavigationList">
+                        <tnt:NavigationListItem
+                            id="dashboardNav"
+                            icon="sap-icon://home"
+                            text="Dashboard"
+                            select=".onNavItemSelect"
+                            key="dashboard"/>
+                        <tnt:NavigationListItem
+                            id="newRequestNav"
+                            icon="sap-icon://create"
+                            text="New Request"
+                            select=".onNavItemSelect"
+                            key="createRequest"/>
+                        <tnt:NavigationListItem
+                            id="approvalNav"
+                            icon="sap-icon://approve"
+                            text="Approval Workflow"
+                            select=".onNavItemSelect"
+                            key="approvalView"/>
+                        <tnt:NavigationListItem
+                            id="storeNav"
+                            icon="sap-icon://inventory"
+                            text="Store Operations"
+                            select=".onNavItemSelect"
+                            key="storeView"/>
+                    </tnt:NavigationList>
+                </tnt:SideNavigation>
+            </tnt:sideContent>
+        
+            <tnt:mainContents>
+                <App id="app"/>
+            </tnt:mainContents>
+        </tnt:ToolPage>
+</mvc:View>

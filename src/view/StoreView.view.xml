@@ -1,0 +1,204 @@
+
+<mvc:View
+    controllerName="materialreq.controller.StoreView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+    <Page id="storePage" title="Store Operations - Pick/Pack/Issue" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <f:DynamicPage id="dynamicPageId" headerExpanded="true">
+                <f:title>
+                    <f:DynamicPageTitle>
+                        <f:heading>
+                            <Title text="Material Issue" />
+                        </f:heading>
+                        <f:subHeading>
+                            <Label text="{/requisitionNumber}" />
+                        </f:subHeading>
+                        <f:actions>
+                            <ObjectStatus text="{/status}" state="{/statusState}" />
+                        </f:actions>
+                    </f:DynamicPageTitle>
+                </f:title>
+                
+                <f:header>
+                    <f:DynamicPageHeader pinnable="true">
+                        <f:content>
+                            <HBox justifyContent="SpaceBetween" class="sapUiMediumMargin">
+                                <VBox>
+                                    <Label text="Approved Date:" />
+                                    <Text text="{/approvedDate}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Requestor:" />
+                                    <Text text="{/requestorName}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Subcontractor:" />
+                                    <Text text="{/subconName}" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Priority:" />
+                                    <ObjectStatus text="{/priority}" state="{/priorityState}" />
+                                </VBox>
+                            </HBox>
+                        </f:content>
+                    </f:DynamicPageHeader>
+                </f:header>
+                
+                <f:content>
+                    <IconTabBar id="iconTabBar" selectedKey="picking" class="sapUiResponsiveContentPadding">
+                        <items>
+                            <IconTabFilter key="picking" text="Picking" icon="sap-icon://checklist-item">
+                                <content>
+                                    <Panel headerText="Material Picking List" class="sapUiResponsiveMargin">
+                                        <headerToolbar>
+                                            <Toolbar>
+                                                <Title text="Items to Pick" />
+                                                <ToolbarSpacer />
+                                                <Button text="Mark All Picked" press="onMarkAllPicked" type="Emphasized" />
+                                            </Toolbar>
+                                        </headerToolbar>
+                                        <content>
+                                            <Table id="pickingTable" items="{/items}" mode="MultiSelect">
+                                                <columns>
+                                                    <Column>
+                                                        <Text text="Item" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Description" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Required Qty" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Available Qty" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Picked Qty" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Location" />
+                                                    </Column>
+                                                    <Column>
+                                                        <Text text="Status" />
+                                                    </Column>
+                                                </columns>
+                                                <items>
+                                                    <ColumnListItem>
+                                                        <cells>
+                                                            <ObjectIdentifier title="{partNo}" text="{srNo}" />
+                                                            <Text text="{itemDescription}" />
+                                                            <Text text="{requiredQuantity} {uom}" />
+                                                            <Text text="{availableQuantity} {uom}" />
+                                                            <Input value="{pickedQuantity}" width="80px" change="onPickedQuantityChange" />
+                                                            <Text text="{storageLocation}" />
+                                                            <ObjectStatus text="{pickingStatus}" state="{pickingStatusState}" />
+                                                        </cells>
+                                                    </ColumnListItem>
+                                                </items>
+                                            </Table>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="packing" text="Packing" icon="sap-icon://shipping-status">
+                                <content>
+                                    <Panel headerText="Packing Information" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <form:SimpleForm
+                                                editable="true"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanXL="3"
+                                                labelSpanL="3"
+                                                labelSpanM="3"
+                                                labelSpanS="12"
+                                                adjustLabelSpan="false"
+                                                emptySpanXL="4"
+                                                emptySpanL="4"
+                                                emptySpanM="4"
+                                                emptySpanS="0"
+                                                columnsXL="1"
+                                                columnsL="1"
+                                                columnsM="1"
+                                                singleContainerFullSize="false">
+                                                <content>
+                                                    <Label text="Package Type:" />
+                                                    <ComboBox selectedKey="{/packageType}" items="{/packageTypes}">
+                                                        <core:Item key="{key}" text="{text}" />
+                                                    </ComboBox>
+                                                    
+                                                    <Label text="Number of Packages:" />
+                                                    <Input value="{/numberOfPackages}" type="Number" />
+                                                    
+                                                    <Label text="Total Weight (kg):" />
+                                                    <Input value="{/totalWeight}" type="Number" />
+                                                    
+                                                    <Label text="Packing Notes:" />
+                                                    <TextArea value="{/packingNotes}" rows="3" />
+                                                </content>
+                                            </form:SimpleForm>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                            
+                            <IconTabFilter key="issue" text="Issue" icon="sap-icon://outgoing-call">
+                                <content>
+                                    <Panel headerText="Material Issue" class="sapUiResponsiveMargin">
+                                        <content>
+                                            <form:SimpleForm
+                                                editable="true"
+                                                layout="ResponsiveGridLayout"
+                                                labelSpanXL="3"
+                                                labelSpanL="3"
+                                                labelSpanM="3"
+                                                labelSpanS="12"
+                                                adjustLabelSpan="false"
+                                                emptySpanXL="4"
+                                                emptySpanL="4"
+                                                emptySpanM="4"
+                                                emptySpanS="0"
+                                                columnsXL="1"
+                                                columnsL="1"
+                                                columnsM="1"
+                                                singleContainerFullSize="false">
+                                                <content>
+                                                    <Label text="Issue Date:" />
+                                                    <DatePicker value="{/issueDate}" />
+                                                    
+                                                    <Label text="Issued To:" />
+                                                    <Input value="{/issuedTo}" enabled="false" />
+                                                    
+                                                    <Label text="Vehicle Number:" />
+                                                    <Input value="{/vehicleNumber}" />
+                                                    
+                                                    <Label text="Driver Name:" />
+                                                    <Input value="{/driverName}" />
+                                                    
+                                                    <Label text="Issue Notes:" />
+                                                    <TextArea value="{/issueNotes}" rows="3" />
+                                                </content>
+                                            </form:SimpleForm>
+                                        </content>
+                                    </Panel>
+                                </content>
+                            </IconTabFilter>
+                        </items>
+                    </IconTabBar>
+                </f:content>
+                
+                <f:footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer />
+                        <Button text="Save Progress" press="onSaveProgress" />
+                        <Button text="Complete Issue" press="onCompleteIssue" type="Emphasized" />
+                    </OverflowToolbar>
+                </f:footer>
+            </f:DynamicPage>
+        </content>
+    </Page>
+</mvc:View>

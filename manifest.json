@@ -1,0 +1,149 @@
+
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "materialreq",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.17.4",
+      "toolsId": "94664964-8a17-459a-9c56-faea1771dcfa"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      // "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.135.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.tnt": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "materialreq.i18n.i18n"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "materialreq.view",
+        "async": true,
+        "viewPath": "materialreq.view"
+      },
+      "routes": [
+        {
+          "name": "dashboard",
+          "pattern": "",
+          "target": "dashboard"
+        },
+        {
+          "name": "createRequest",
+          "pattern": "createRequest",
+          "target": "createRequest"
+        },
+        {
+          "name": "editRequest",
+          "pattern": "editRequest/{requisitionId}",
+          "target": "editRequest"
+        },
+        {
+          "name": "requestDetail",
+          "pattern": "requestDetail/{requisitionId}",
+          "target": "requestDetail"
+        },
+        {
+          "name": "approvalView",
+          "pattern": "approvalView/{requisitionId}",
+          "target": "approvalView"
+        },
+        {
+          "name": "storeView",
+          "pattern": "storeView/{requisitionId}",
+          "target": "storeView"
+        }
+      ],
+      "targets": {
+        "dashboard": {
+          "viewName": "Dashboard",
+          "viewLevel": 0,
+          "viewId": "dashboard"
+        },
+        "createRequest": {
+          "viewName": "CreateRequest",
+          "viewLevel": 1,
+          "viewId": "createRequest"
+        },
+        "editRequest": {
+          "viewName": "CreateRequest",
+          "viewLevel": 1,
+          "viewId": "editRequest"
+        },
+        "requestDetail": {
+          "viewName": "ApprovalView",
+          "viewLevel": 1,
+          "viewId": "requestDetail"
+        },
+        "approvalView": {
+          "viewName": "ApprovalView",
+          "viewLevel": 1,
+          "viewId": "approvalView"
+        },
+        "storeView": {
+          "viewName": "StoreView",
+          "viewLevel": 1,
+          "viewId": "storeView"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "materialreq.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}
