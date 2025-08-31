@@ -582,7 +582,7 @@ const Report = () => {
     } else {
       setFilteredData(originalData);
     }
-  }, [filters, originalData, navState?.title]);
+  }, [filters, originalData, navState?.title, handleSearch]);
 
   // Debug keys
   // Filter columns when navState.title is "बैठक शः सूची"
