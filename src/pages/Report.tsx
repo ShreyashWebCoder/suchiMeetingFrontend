@@ -553,34 +553,37 @@ const Report = () => {
 
   useEffect(() => {
     if (navState?.title === "बैठक शः सूची") {
-      const meetingbhaithak = filters.baithak;
-
-      if (!meetingbhaithak || meetingbhaithak.trim() === "") {
+      const meetingbhaithak = filters.baithak?.trim();
+      if (!meetingbhaithak) {
         setFilteredData(originalData);
         return;
       }
 
       const searchMap = handleSearch();
 
-      // Find matching field (backend key) using marathi meeting name
       const matchingField = Object.entries(searchMap).find(([key, value]) => {
         if (Array.isArray(value)) {
-          return value.includes(meetingbhaithak);
+          return value.some((v) => v.trim() === meetingbhaithak);
         }
-        return value === meetingbhaithak;
-      })?.[0]; // => e.g., "a_b_baithak"
+        return value.trim() === meetingbhaithak;
+      })?.[0];
 
-      console.log("Matching Field:", matchingField);
+      if (!matchingField) {
+        setFilteredData([]); // no match
+        return;
+      }
+
       const filtered = originalData.filter((user) => {
-        return matchingField && user[matchingField] === "1";
+        const val = user[matchingField];
+        return val === "1" || val === 1 || val === true;
       });
 
       setFilteredData(filtered);
     } else {
-      setFilteredData(originalData); // fallback for other nav states
+      setFilteredData(originalData);
     }
-  }, [filters, originalData, navState?.title, handleSearch, setFilteredData, filters.baithak]);
-  
+  }, [filters, originalData, navState?.title]);
+
   // Debug keys
   // Filter columns when navState.title is "बैठक शः सूची"
   const displayedColumns =
