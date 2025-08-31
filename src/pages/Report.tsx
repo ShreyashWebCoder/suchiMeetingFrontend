@@ -552,37 +552,43 @@ const Report = () => {
   };
 
   useEffect(() => {
-    if (navState?.title === "बैठक शः सूची") {
-      const meetingbhaithak = filters.baithak?.trim();
-      if (!meetingbhaithak) {
-        setFilteredData(originalData);
-        return;
+  if (!navState?.data && !originalData.length) return;
+
+  let filtered = originalData;
+
+  // Apply general filters (prant, org, duty, star, name)
+  filtered = filtered.filter((row) => {
+    const matchesDuty = filters.duty ? row.duty === filters.duty : true;
+    const matchesOrg = filters.org ? row.org === filters.org : true;
+    const matchesPrant = filters.prant ? row.prant === filters.prant : true;
+    const matchesStar = filters.star ? row.level === filters.star : true;
+    const matchesName = filters.name
+      ? row.name.toLowerCase().includes(filters.name.toLowerCase())
+      : true;
+
+    return matchesDuty && matchesOrg && matchesPrant && matchesStar && matchesName;
+  });
+
+  // Apply baithak filter for "बैठक शः सूची"
+  if (navState?.title === "बैठक शः सूची" && filters.baithak && filters.baithak.trim() !== "") {
+    const searchMap = handleSearch();
+    const matchingField = Object.entries(searchMap).find(([key, value]) => {
+      const normalizedBaithak = filters.baithak.trim();
+      if (Array.isArray(value)) {
+        return value.includes(normalizedBaithak);
       }
+      return value === normalizedBaithak;
+    })?.[0];
 
-      const searchMap = handleSearch();
-
-      const matchingField = Object.entries(searchMap).find(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.some((v) => v.trim() === meetingbhaithak);
-        }
-        return value.trim() === meetingbhaithak;
-      })?.[0];
-
-      if (!matchingField) {
-        setFilteredData([]); // no match
-        return;
-      }
-
-      const filtered = originalData.filter((user) => {
-        const val = user[matchingField];
-        return val === "1" || val === 1 || val === true;
-      });
-
-      setFilteredData(filtered);
+    if (matchingField) {
+      filtered = filtered.filter((user) => user[matchingField] === "1");
     } else {
-      setFilteredData(originalData);
+      console.warn(`No matching field found for baithak: ${filters.baithak}`);
     }
-  }, [filters, originalData, navState?.title, handleSearch]);
+  }
+
+  setFilteredData(filtered);
+}, [filters, originalData, navState?.data, navState?.title]);
 
   // Debug keys
   // Filter columns when navState.title is "बैठक शः सूची"
@@ -598,29 +604,7 @@ const Report = () => {
       )
       : columns;
 
-  useEffect(() => {
-    if (!navState?.data) return;
-    const filtered = originalData.filter((row) => {
-      const matchesDuty = filters.duty ? row.duty === filters.duty : true;
-      const matchesOrg = filters.org ? row.org === filters.org : true;
-      const matchesPrant = filters.prant ? row.prant === filters.prant : true;
-      const matchesStar = filters.star ? row.level === filters.star : true;
-      const matchesName = filters.name
-        ? row.name.toLowerCase().includes(filters.name.toLowerCase())
-        : true;
-
-      return (
-        matchesDuty && matchesOrg && matchesPrant && matchesStar && matchesName
-      );
-    });
-
-    setFilteredData(filtered);
-  }, [filters, navState.data]);
-
-  // console.log("Filtered data:", filteredData);
-  // console.log("Original data:", originalData);
-
-  // Download Excel
+ 
   const handleDownload = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredData.map((row: UserData, idx) => {
