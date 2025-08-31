@@ -580,6 +580,7 @@ const Report = () => {
       setFilteredData(originalData); // fallback for other nav states
     }
   }, [filters, originalData, navState?.title, handleSearch, setFilteredData, filters.baithak]);
+  
   // Debug keys
   // Filter columns when navState.title is "बैठक शः सूची"
   const displayedColumns =
