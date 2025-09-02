@@ -22,6 +22,22 @@ import AbBaithakReport from "./pages/AbBaithakReport";
 const queryClient = new QueryClient();
 
 // Protected Route Component
+const AuthRoute = ({ children }: { children: React.ReactNode }) => {
+  const userType = localStorage.getItem("userType");
+
+  // If user is already logged in, redirect them to their dashboard
+  if (userType === "admin") {
+    return <Navigate to="/admin-dashboard" replace />;
+  } else if (userType === "user") {
+    return <Navigate to="/user-dashboard" replace />;
+  } else if (userType === "vividhksetra") {
+    return <Navigate to="/vividhksetra-dashboard" replace />;
+  }
+
+  // Otherwise show the login page
+  return <>{children}</>;
+};
+
 const ProtectedRoute = ({
   children,
   allowedUserType,
@@ -51,7 +67,15 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <AuthRoute>
+                <Login />
+              </AuthRoute>
+            }
+          />
+
           <Route
             path="/admin-dashboard"
             element={
@@ -84,22 +108,22 @@ const App = () => (
               </ProtectedRoute>
             }
           />
-            <Route
-              path="/prant-pracharak-report"
-              element={
-                <ProtectedRoute allowedUserType="admin">
-                  <PrantPracharakReport />
-                </ProtectedRoute>
-              }
-            />
-               <Route
-              path="/ab-baithak-report"
-              element={
-                <ProtectedRoute allowedUserType="admin">
-                  <AbBaithakReport />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/prant-pracharak-report"
+            element={
+              <ProtectedRoute allowedUserType="admin">
+                <PrantPracharakReport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ab-baithak-report"
+            element={
+              <ProtectedRoute allowedUserType="admin">
+                <AbBaithakReport />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/view-dropdown/:type"
             element={
