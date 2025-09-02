@@ -72,55 +72,71 @@ const AbBaithakReport = () => {
       case "बैठक शः संख्या": {
         tableData = allDropDowns.prants.map((item: any) => ({
           "अ. क्र.": item.name,
-          "रा. स्व. संघ": userData.filter(
+          "अ. भा. बैठक": userData.filter(
             (user: any) =>
               user.a_b_baithak === true &&
               user.attendance === "p" &&
-              user.prant === item.name &&
-              user.prakar === "रा. स्व. संघ"
+              user.prant === item.name
           ).length,
-          "विविध क्षेत्र": userData.filter(
+          "क्षेत्र कार्यवाह बैठक": userData.filter(
             (user: any) =>
-              user.a_b_baithak === true &&
+              user.kshetra_karyawah_baithak === true &&
               user.attendance === "p" &&
-              user.prant === item.name &&
-              user.prakar === "विविध क्षेत्र"
+              user.prant === item.name
           ).length,
-          "Grand Total":
-            userData.filter(
-              (user: any) =>
-                user.a_b_baithak === true &&
-                user.attendance === "p" &&
-                user.prant === item.name &&
-                user.prakar === "रा. स्व. संघ"
-            ).length +
-            userData.filter(
-              (user: any) =>
-                user.a_b_baithak === true &&
-                user.attendance === "p" &&
-                user.prant === item.name &&
-                user.prakar === "विविध क्षेत्र"
-            ).length,
+          "प्रांत कार्यवाह बैठक": userData.filter(
+            (user: any) =>
+              user.prant_karyawah_baithak === true &&
+              user.attendance === "p" &&
+              user.prant === item.name
+          ).length,
+          "कार्यकारी मंडल बैठक": userData.filter(
+            (user: any) =>
+              user.karyakari_mandal_baithak === true &&
+              user.attendance === "p" &&
+              user.prant === item.name
+          ).length,
+          "प्रांत प्रचारक बैठक": userData.filter(
+            (user: any) =>
+              user.prant_pracharak_baithak === true &&
+              user.attendance === "p" &&
+              user.prant === item.name
+          ).length,
+          "क्षेत्र प्रचारक बैठक": userData.filter(
+            (user: any) =>
+              user.kshetra_pracharak_baithak === true &&
+              user.attendance === "p" &&
+              user.prant === item.name
+          ).length,
+          "भौगोलिक पालक अधिकारी बैठक": userData.filter(
+            (user: any) =>
+              user.bhougolic_palak_adhikari_baithak === true &&
+              user.attendance === "p" &&
+              user.prant === item.name
+          ).length,
         }));
-        const raSwSanghTotal = tableData.reduce(
-          (sum, item) => sum + item["रा. स्व. संघ"],
-          0
-        );
-        const vividhKshetraTotal = tableData.reduce(
-          (sum, item) => sum + item["विविध क्षेत्र"],
-          0
-        );
-        const grandTotal = tableData.reduce(
-          (sum, item) => sum + item["Grand Total"],
-          0
-        );
+        const totals = (cols) =>
+          tableData.reduce((sum, item) => sum + (item[cols] || 0), 0);
         tableData.push({
           "अ. क्र.": "Grand Total",
-          "रा. स्व. संघ": raSwSanghTotal,
-          "विविध क्षेत्र": vividhKshetraTotal,
-          "Grand Total": grandTotal,
+          "अ. भा. बैठक": totals("अ. भा. बैठक"),
+          "क्षेत्र कार्यवाह बैठक": totals("क्षेत्र कार्यवाह बैठक"),
+          "प्रांत कार्यवाह बैठक": totals("प्रांत कार्यवाह बैठक"),
+          "कार्यकारी मंडल बैठक": totals("कार्यकारी मंडल बैठक"),
+          "प्रांत प्रचारक बैठक": totals("प्रांत प्रचारक बैठक"),
+          "क्षेत्र प्रचारक बैठक": totals("क्षेत्र प्रचारक बैठक"),
+          "भौगोलिक पालक अधिकारी बैठक": totals("भौगोलिक पालक अधिकारी बैठक"),
         });
-        cols = ["अ. क्र.", "रा. स्व. संघ", "विविध क्षेत्र", "Grand Total"];
+        cols = [
+          "अ. क्र.",
+          "अ. भा. बैठक",
+          "क्षेत्र कार्यवाह बैठक",
+          "प्रांत कार्यवाह बैठक",
+          "कार्यकारी मंडल बैठक",
+          "प्रांत प्रचारक बैठक",
+          "क्षेत्र प्रचारक बैठक",
+          "भौगोलिक पालक अधिकारी बैठक",
+        ];
         break;
       }
       default:
@@ -131,69 +147,6 @@ const AbBaithakReport = () => {
       setData(tableData);
     }
   }, [navState?.title, allDropDowns]);
-
-  // useEffect of कार्यकारी मंडल
-  useEffect(() => {
-    if (
-      navState?.title === "कार्यकारी मंडल बैठक संख्या" ||
-      !allDropDowns?.prants
-    )
-      return;
-
-    let karyakariMadaltableData: any[] = [];
-    let karyakariMadalcols: string[] = [
-      "अ. क्र.",
-      "रा. स्व. संघ",
-      "विविध क्षेत्र",
-      "Grand Total",
-    ];
-
-    karyakariMadaltableData = allDropDowns.prants.map(
-      (prantItem: any, index: number) => {
-        const usersInPrant = userData.filter(
-          (user: any) =>
-            user.prant === prantItem.name &&
-            user.attendance === "p" &&
-            user.karyakari_mandal_baithak === true
-        );
-
-        const raSwSanghCount = usersInPrant.filter(
-          (user: any) => user.prakar === "रा. स्व. संघ"
-        ).length;
-
-        const vividhKshetraCount = usersInPrant.filter(
-          (user: any) => user.prakar === "विविध क्षेत्र"
-        ).length;
-
-        return {
-          "अ. क्र.": prantItem.name,
-          "रा. स्व. संघ": raSwSanghCount,
-          "विविध क्षेत्र": vividhKshetraCount,
-          "Grand Total": raSwSanghCount + vividhKshetraCount,
-        };
-      }
-    );
-
-    // Add grand total row
-    const raSwSanghTotal = karyakariMadaltableData.reduce(
-      (sum, row) => sum + row["रा. स्व. संघ"],
-      0
-    );
-    const vividhKshetraTotal = karyakariMadaltableData.reduce(
-      (sum, row) => sum + row["विविध क्षेत्र"],
-      0
-    );
-
-    karyakariMadaltableData.push({
-      "अ. क्र.": "Grand Total",
-      "रा. स्व. संघ": raSwSanghTotal,
-      "विविध क्षेत्र": vividhKshetraTotal,
-      "Grand Total": raSwSanghTotal + vividhKshetraTotal,
-    });
-
-    setKaryakariMadalColumns(karyakariMadalcols);
-    setKaryakariMadalData(karyakariMadaltableData);
-  }, [navState?.title, allDropDowns, userData]);
 
   // Download Excel (use visible data and columns)
   const handleDownload = () => {
@@ -227,12 +180,12 @@ const AbBaithakReport = () => {
   };
 
   // Calculate grand totals for display
-  const grandTotal = data.find((row) => row["अ. क्र."] === "Grand Total")?.[
-    "Grand Total"
-  ] || 0;
-  const karyakariMadalGrandTotal = karyakariMadalData.find(
-    (row) => row["अ. क्र."] === "Grand Total"
-  )?.["Grand Total"] || 0;
+  const grandTotal =
+    data.find((row) => row["अ. क्र."] === "Grand Total")?.["Grand Total"] || 0;
+  const karyakariMadalGrandTotal =
+    karyakariMadalData.find((row) => row["अ. क्र."] === "Grand Total")?.[
+      "Grand Total"
+    ] || 0;
 
   return (
     <>
@@ -248,7 +201,7 @@ const AbBaithakReport = () => {
           <CardContent className="p-6 ">
             <div className="flex items-center justify-between mb-4">
               {/* Download button */}
-              <h1 className="text-2xl font-bold">प्रतिनिधि सभा</h1>
+              <h1 className="text-2xl font-bold"></h1>
               <div className="flex justify-end">
                 <Button
                   onClick={handleDownload}
@@ -259,9 +212,7 @@ const AbBaithakReport = () => {
                 </Button>
               </div>
             </div>
-            <div className="my-2 text-lg font-bold">
-              Total: {grandTotal}
-            </div>
+          
 
             {/* Table */}
             <div className="overflow-auto border rounded-lg max-h-[60vh]">
@@ -295,67 +246,6 @@ const AbBaithakReport = () => {
                         className="hover:bg-blue-50 cursor-pointer transition"
                       >
                         {columns?.map((col) => (
-                          <td
-                            key={col}
-                            className="px-3 py-2 border-b min-w-[140px] text-left"
-                          >
-                            {row[col] ?? ""}
-                          </td>
-                        ))}
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-            {/* Table for karyakari madal */}
-            <div className="flex items-center justify-between my-4 mt-10 mx-4">
-              <h1 className="text-2xl font-bold">कार्यकारी मंडल</h1>
-              <div className="">
-                <Button
-                  onClick={handleKaryakariMadalDownload}
-                  className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  डाउनलोड एक्सेल
-                </Button>
-              </div>
-            </div>
-            <div className="my-2 text-lg font-bold">
-              Grand Total: {karyakariMadalGrandTotal}
-            </div>
-
-            <div className="overflow-auto border rounded-lg max-h-[60vh]">
-              <table className="min-w-[1400px] w-full text-sm text-gray-900">
-                <thead className="bg-gradient-to-r from-orange-100 to-blue-100 sticky top-0 z-10">
-                  <tr>
-                    {karyakariMadalColumns?.map((col) => (
-                      <th
-                        key={col}
-                        className="px-3 py-2 font-semibold border-b border-gray-200 whitespace-nowrap min-w-[140px] text-left"
-                      >
-                        {col}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {karyakariMadalData?.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={karyakariMadalColumns?.length}
-                        className="text-center py-8 text-gray-400"
-                      >
-                        कोई डेटा नहीं मिला
-                      </td>
-                    </tr>
-                  ) : (
-                    karyakariMadalData?.map((row, idx) => (
-                      <tr
-                        key={row.id || idx}
-                        className="hover:bg-blue-50 cursor-pointer transition"
-                      >
-                        {karyakariMadalColumns?.map((col) => (
                           <td
                             key={col}
                             className="px-3 py-2 border-b min-w-[140px] text-left"
