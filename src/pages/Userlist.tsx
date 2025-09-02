@@ -641,7 +641,7 @@ const UserList = () => {
                   placeholder="नाम"
                   value={filters.name}
                   onChange={(e) =>
-                    setFilters((f) => ({ ...f, name: e.target.value }))
+                    setFilters((f) => ({ ...f, name: e.target.value.trim() }))
                   }
                 />
               </div>
